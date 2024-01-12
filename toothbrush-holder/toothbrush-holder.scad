@@ -1,15 +1,35 @@
 $fn = 64;
 
 HOLDER_L = 7;
-HOLDER_W = 5.5;
-DELTA = 0.5;
+HOLDER_W = 5;
+DELTA = 0.6;
 
 SLOT_R = 0.85;
 SLOT_DL = -SLOT_R;
 SLOT_DW = -HOLDER_W/2;
 
-HOLDER_H = 3;
-BASE_H = 3;
+HOLDER_H = 10;
+BASE_H = 2.5;
+
+N = 3;
+DISTANCE_W = 18;
+BASE_L = 20;
+BASE_W = DISTANCE_W * N;
+
+DISPLACEMENT_L = -3;
+
+BASE_RIM_R = 3;
+
+module base() {
+    translate([0, 0, BASE_H/2]) {
+        cube([BASE_W + (BASE_RIM_R*2), BASE_L, BASE_H], center=true);
+        cube([BASE_W, BASE_L + (BASE_RIM_R*2), BASE_H], center=true);
+        translate([+BASE_W/2, +BASE_L/2, 0]) cylinder(r=BASE_RIM_R, h=BASE_H, center=true);
+        translate([+BASE_W/2, -BASE_L/2, 0]) cylinder(r=BASE_RIM_R, h=BASE_H, center=true);
+        translate([-BASE_W/2, +BASE_L/2, 0]) cylinder(r=BASE_RIM_R, h=BASE_H, center=true);
+        translate([-BASE_W/2, -BASE_L/2, 0]) cylinder(r=BASE_RIM_R, h=BASE_H, center=true);
+    }
+}
 
 function hypotenuse(l1, l2) = sqrt((l1*l1)+(l2*l2));
 function leg(h, l) = sqrt((h*h)-(l*l));
@@ -42,5 +62,7 @@ module holder() {
     }
 }
 
-holder();
-translate([0, 0, BASE_H / 2]) cylinder(r=5, h=BASE_H, center=true);
+translate([-DISTANCE_W, DISPLACEMENT_L, 0]) holder();
+translate([0, DISPLACEMENT_L, 0]) holder();
+translate([+DISTANCE_W, DISPLACEMENT_L, 0]) holder();
+base();
