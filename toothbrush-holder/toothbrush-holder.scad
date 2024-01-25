@@ -1,7 +1,7 @@
 $fn = 64;
 
-HOLDER_L = 7;
-HOLDER_W = 5;
+HOLDER_L = 6.9;
+HOLDER_W = 4.9;
 DELTA = 0.6;
 
 SLOT_R = 0.85;
@@ -12,7 +12,7 @@ HOLDER_H = 10;
 BASE_H = 2.5;
 
 N = 3;
-DISTANCE_W = 18;
+DISTANCE_W = 36;
 BASE_L = 20;
 BASE_W = DISTANCE_W * N;
 
