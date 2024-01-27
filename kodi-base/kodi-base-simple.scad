@@ -9,20 +9,18 @@ $fn = 64;
 // r * (sqrt(2) - 1) = d
 // r = d / (sqrt(2) - 1)
 
-BASE_IN = 108;
-BASE_IN_R = 12;
-BASE_LINE = BASE_IN - (BASE_IN_R * 2);
+BASE_W = 108;
+// BASE_DIAG = 142;
+// BASE_DIAG_MAX = BASE_W * sqrt(2);
+// BASE_DIAG_DELTA = (BASE_DIAG_MAX - BASE_DIAG) / 2;
+// BASE_R = BASE_DIAG_DELTA / (sqrt(2) - 1); // 12.95
+BASE_R = 12;
 
-BASE_OUT = 128;
-BASE_OUT_R = (BASE_OUT-BASE_LINE) / 2;
+BASE_WALL = 2;
+BASE_BRIM = 5;
 
-WALL = 2;
-FLOOR = 2;
-
+BASE_FLOOR_H = 2;
 BASE_WALL_H = 21.5;
-UPPER_WALL_H = 5.5;
-
-SNAP_D_OUT = 54;
 
 HDD_PAD = 1;
 HDD_W_IN = 70;
@@ -55,46 +53,6 @@ module rounded_cube(w = 20, l = 20, h = 10, r = 5) {
         translate([-((w/2)-r), -((w/2)-r), 0]) cylinder(r=r, h=h, center=true);
     }
 }
-
-module upper_wall_profile() {
-    RIM = (BASE_OUT - BASE_IN) / 2;
-    translate([-WALL, 0]) square([WALL, BASE_WALL_H]);
-    difference() {
-        translate([-(RIM + WALL), BASE_WALL_H]) square([RIM + WALL, UPPER_WALL_H + FLOOR]);
-        translate([0, BASE_WALL_H + UPPER_WALL_H + FLOOR]) scale([RIM/UPPER_WALL_H, 1]) circle(r = UPPER_WALL_H);
-    }
-}
-//upper_wall_profile() {}
-
-module upper_wall_extrusion() {
-    for(m = [[0, 0], [1, 1]])
-    mirror(m)
-    for(m = [[0, 0], [1, 0]])
-    mirror(m)
-    for(m = [[0, 0], [0, 1]])
-    mirror(m)
-    translate([0, BASE_LINE / 2, 0])
-    {
-        rotate([90, 0, 0])
-        linear_extrude(height = BASE_LINE / 2, center = false, convexity = 10, twist = 0)
-        translate([BASE_OUT/2, 0, 0])
-        for(i=[0:1:$children-1]) {
-            children(i);
-        }
-        translate([BASE_LINE/2, 0, 0])
-        rotate_extrude(angle = 45, convexity = 10)
-        translate([BASE_OUT_R, 0, 0])
-        for(i=[0:1:$children-1]) {
-            children(i);
-        }
-    }
-}
-
-upper_wall_extrusion() {
-    upper_wall_profile();
-}
-
-//square([BASE_OUT, BASE_OUT], center=true);
 
 module rounded_slot(r=5, h=10) {
     H=20;
