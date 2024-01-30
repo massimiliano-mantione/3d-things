@@ -70,7 +70,7 @@ module upper_wall_profile() {
         translate([0, BASE_WALL_H + UPPER_WALL_H + FLOOR]) scale([(RIM - WALL)/UPPER_WALL_H, 1]) circle(r = UPPER_WALL_H);
     }
 }
-// upper_wall_profile();
+//upper_wall_profile();
 
 module upper_wall_extrusion() {
     for(m = [[0, 0], [1, 1]])
@@ -192,7 +192,96 @@ module lower_base() {
 
 //translate([0, 0, 10]) upper_base();
 
-lower_base();
+//lower_base();
 
 
 //square([BASE_OUT, BASE_OUT], center=true);
+
+FILLING_OPEN_H = 4.5;
+RIM_LOW_H = 1.25;
+RIM_UP_H = 2;
+
+FOOT_H = 4.3;
+FOOT_D = 8;
+FOOT_HOLE_D = 3;
+FOOT_OFF = 50;
+
+FILLING_SIDE_CUT_OUT_W = 41;
+FILLING_SIDE_CUT_IN_W = 37.5;
+FILLING_CUT_THICK = (FILLING_SIDE_CUT_OUT_W - FILLING_SIDE_CUT_IN_W) / 2;
+FILLING_SIDE_CUT_OFF = (FILLING_SIDE_CUT_OUT_W + FILLING_SIDE_CUT_IN_W) / 4;
+
+FILLING_SIDE_CUT_H = 3.7;
+FILLING_FRONT_CUT_H = 5;
+
+FILLING_H = FILLING_OPEN_H + RIM_LOW_H + RIM_UP_H;
+
+
+FILLING_OUT = BASE_OUT - (WALL * 2 + 2);
+FILLING_OUT_R = (FILLING_OUT-BASE_LINE) / 2;
+
+module filling_profile() {
+    translate([-((WALL * 2) + 1), 0]) square([WALL, FILLING_H]);
+}
+//filling_profile();
+
+//upper_wall_extrusion() { filling_profile(); }
+
+//BASE_OUT = 128;
+//BASE_OUT_R = (BASE_OUT-BASE_LINE) / 2;
+
+
+//rounded_cube(w = FILLING_OUT, l = FILLING_OUT, h = FILLING_H, r = FILLING_OUT_R);
+
+//translate([0, 0, -1]) rounded_cube(w = FILLING_OUT, l = FILLING_OUT, h = 1, r = FILLING_OUT_R);
+
+module filling_holes() {
+    for (dx = [1, -1])
+    for (dy = [1, -1])
+    {
+        translate([dx * BASE_OUT / 2, dy * FILLING_SIDE_CUT_OFF, 0])
+        translate([0, 0, FILLING_H - FILLING_SIDE_CUT_H])
+        translate([0, 0, FILLING_SIDE_CUT_H/2]) cube([20, FILLING_CUT_THICK, FILLING_SIDE_CUT_H], center = true);
+        translate([dx * FOOT_OFF, dy * FOOT_OFF, 0])
+        {
+            translate([0, 0, FILLING_H - FOOT_H]) cylinder(d = FOOT_D, h = 20);
+            cylinder(d = FOOT_HOLE_D, h = 40, center = true);
+        }
+    }
+    translate([0, 0, FILLING_H - FILLING_FRONT_CUT_H])
+    translate([0, BASE_OUT / 2, FILLING_FRONT_CUT_H/2]) cube([FILLING_CUT_THICK, 20, FILLING_FRONT_CUT_H], center = true);
+    for (dx = [1, -1])
+    translate([dx * ((BASE_OUT / 2) - (WALL + WALL + 1)), 0, 0])
+    translate([0, 0, FILLING_H - FILLING_SIDE_CUT_H])
+    translate([0, 0, FILLING_SIDE_CUT_H/2]) cube([2, FILLING_SIDE_CUT_OUT_W, FILLING_SIDE_CUT_H], center=true);
+
+}
+//filling_holes();
+
+module filling_corners() {
+    W = 30;
+    R = 8;
+    OFF = 58;
+
+    intersection() {
+        for (dx = [1, -1])
+        for (dy = [1, -1]) {
+            translate([dx * OFF, dy * OFF, 0])
+            rounded_cube(w = W, l = W, h = FILLING_H, r = R);
+        }
+        rounded_cube(w = FILLING_OUT, l = FILLING_OUT, h = FILLING_H, r = FILLING_OUT_R);
+    }
+}
+//filling_corners();
+
+module filling() {
+    difference() {
+        union() {
+            filling_corners();
+            upper_wall_extrusion() { filling_profile(); }
+        }
+        filling_holes();
+    }
+}
+
+filling();
