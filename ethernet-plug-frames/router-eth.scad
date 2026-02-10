@@ -55,7 +55,7 @@ difference () {
             cylinder(r = PIN_HOLE_R_IN, h = BOX_THICK + 2);
         translate([ PIN_HOLE_2_X, PIN_HOLE_2_Y, -1])
             cylinder(r = PIN_HOLE_R_IN, h = BOX_THICK + 2);
-        translate([BOX_W, BOX_H - (FIBER_PLATE_DY + (FIBER_HOLE_Y / 2)), PLATE_THICK + 0.1])
-            cube_centered([ 10, FIBER_HOLE_Y, WIRE_THICK ], r = 1, center = [ true, true, false ]);
+        translate([BOX_W, BOX_H - (FIBER_PLATE_DY + (FIBER_HOLE_Y / 2)), PLATE_THICK])
+            cube_centered([ 10, FIBER_HOLE_Y, WIRE_THICK + 1 ], r = 1, center = [ true, true, false ]);
     }
 }
