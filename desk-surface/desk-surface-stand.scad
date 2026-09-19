@@ -27,7 +27,7 @@ OVERHANG_L = 30;
 OVERHANG_OUT = 4;
 
 OVERHANG_W = STAND_W + BASE_INNER_W_SPACE + OVERHANG_OUT;
-OVERHANG_W_OFFSET = STAND_W_OFFSET + (STAND_W / 2)  + (OVERHANG_W / 2);
+OVERHANG_W_OFFSET = STAND_W_OFFSET  + (OVERHANG_W / 2);
 
 OVERHANG_H = BASE_INNER_W_SPACE;
 
@@ -87,6 +87,6 @@ module base() {
   }
 }
 
-//base();
+base();
 
-mirror([1, 0, 0]) base();
+translate([50, 0, 0]) mirror([1, 0, 0]) base();
