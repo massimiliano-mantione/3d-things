@@ -4,13 +4,19 @@ BASE_L_DELTA = 16; // 210 - 194
 
 // actual: 192
 STAND_L = 194;
+// STAND_L = 194 - 14;
 //STAND_L = 40;
 // actual: 9
 STAND_W = 10;
 
 // actual: 210
-BASE_L = 209;
+// BASE_L = 209;
+BASE_L = 202;
 //BASE_L = STAND_L + BASE_L_DELTA;
+
+BASE_L_OFFSET = BASE_L - STAND_L;
+
+
 // actual: 20
 BASE_W = 19;
 
@@ -78,15 +84,16 @@ module base() {
   difference() {
     union() {
       platform();
-      overhang();
+      translate([0, BASE_L_OFFSET, 0]) overhang();
     }
     union() {
-      stand();
+      translate([0, BASE_L_OFFSET, 0]) stand();
       base_hollow();
     }
   }
 }
 
-base();
+//base();
 
-translate([50, 0, 0]) mirror([1, 0, 0]) base();
+mirror([1, 0, 0]) base();
+//translate([50, 0, 0]) mirror([1, 0, 0]) base();
